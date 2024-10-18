@@ -1,32 +1,34 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  displayMessage : {},
-  messageData : {
-    message : []
-  }
-}
+  displayMessage: {},
+  messageData: {
+    messages: [],
+  },
+};
 
 export const message = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setIdFriend: (state, action) => {
-      state.displayMessage.id = action.payload
+      state.displayMessage.id = action.payload;
+      console.log(action.payload);
     },
     setBackHome: (state, action) => {
-        state.displayMessage = {}
+      state.displayMessage = {};
     },
-    setMessageData : (state, action) => {
-        state.messageData = action.payload
+    setMessageData: (state, action) => {
+      state.messageData = action.payload;
     },
-    addMessage: (state,action) => {
-      state.messageData.messages.push(action.payload.data)
-    }
+    addMessage: (state, action) => {
+      state.messageData.messages.push(action.payload.data);
+    },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { setIdFriend,setBackHome,setMessageData, addMessage } = message.actions
+export const { setIdFriend, setBackHome, setMessageData, addMessage } =
+  message.actions;
 
-export default message.reducer
+export default message.reducer;
