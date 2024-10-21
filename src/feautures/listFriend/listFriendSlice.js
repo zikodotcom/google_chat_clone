@@ -10,6 +10,7 @@ export const listFriend = createSlice({
   initialState,
   reducers: {
     setListFriend: (state, action) => {
+      console.log(action.payload);
       state.data = action.payload;
     },
     changeLastMessage: (state, action) => {
@@ -37,10 +38,20 @@ export const listFriend = createSlice({
         state.data.unshift(action.payload.data);
       }
     },
+    changeStatus: (state, action) => {
+      // TODO: Check if user exists
+      const user = state.data.findIndex(
+        (el) => el.friend["_id"] == action.payload.id
+      );
+      if (user !== -1) {
+        state.data[user]["friend"]["status"] = action.payload.status;
+      }
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setListFriend, changeLastMessage } = listFriend.actions;
+export const { setListFriend, changeLastMessage, changeStatus } =
+  listFriend.actions;
 
 export default listFriend.reducer;

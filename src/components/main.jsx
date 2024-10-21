@@ -94,10 +94,8 @@ export default function Main() {
     }
   };
   const handleStatus = (status) => {
-    axiosClient.post("/v1/changeStatus", {
-      id: value.id,
-      status,
-    });
+    console.log(value);
+    axiosClient.get(`/changeUserStatus/${value.id}/${status}`);
     setStatus(status);
   };
   const handleDisplay = () => {

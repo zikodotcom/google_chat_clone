@@ -10,7 +10,7 @@ import {
 import { axiosClient } from "../axios";
 import { useForm } from "react-hook-form";
 
-import { changeLastMessage } from "../feautures/listFriend/listFriendSlice";
+import { changeLastMessage, changeStatus } from "../feautures/listFriend/listFriendSlice";
 import socket from "../service/socket";
 export default function Message() {
   const io = socket;
@@ -29,7 +29,7 @@ export default function Message() {
     io.emit("join-room", value.id);
     axiosClient.get(`/getMessages/${id}`).then((res) => {
       dispatch(setMessageData(res.data));
-      //   setStatus(res.data.user.status);
+      setStatus(res.data.friend.status);
       setLoading(false);
       setTimeout(() => scrollDown(), 1000);
     });
@@ -41,13 +41,13 @@ export default function Message() {
             data: message,
           })
         );
-        setTimeout(() => scrollDown(), 200);
         dispatch(
           changeLastMessage({
             id: message.sender,
             data: message,
           })
         );
+        setTimeout(() => scrollDown(), 200);
       }
     });
     // TODO ON added new friend
@@ -59,6 +59,11 @@ export default function Message() {
           data,
         })
       );
+    });
+    // TODO Change status
+    io.on("changeStatus", (data) => {
+      console.log("change status", data);
+      dispatch(changeStatus(data));
     });
     // Clean up the event listener when the component unmounts
     return () => {
@@ -84,6 +89,12 @@ export default function Message() {
         setValue("message", "");
         dispatch(
           addMessage({
+            data: res.data,
+          })
+        );
+        dispatch(
+          changeLastMessage({
+            id: res.data.receiver,
             data: res.data,
           })
         );

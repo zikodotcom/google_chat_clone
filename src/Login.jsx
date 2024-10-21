@@ -6,6 +6,7 @@ import { axiosClient } from "./axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userData } from "./feautures/user/userSlice";
+import { setListFriend } from "./feautures/listFriend/listFriendSlice";
 function Login() {
   const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -24,8 +25,13 @@ function Login() {
       .post("/login", data)
       .then((res) => {
         if (res.status === 201) {
-          dispatch(userData(res.data));
-
+          let data = res.data;
+          data["id"] = data["_id"];
+          dispatch(userData(data));
+          // ? Get list friends
+          axiosClient.get("/getFriends").then((res) => {
+            dispatch(setListFriend(res.data));
+          });
           navigate("/chat");
         }
       })
