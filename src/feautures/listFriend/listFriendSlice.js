@@ -10,7 +10,6 @@ export const listFriend = createSlice({
   initialState,
   reducers: {
     setListFriend: (state, action) => {
-      console.log(action.payload);
       state.data = action.payload;
     },
     changeLastMessage: (state, action) => {
@@ -21,7 +20,6 @@ export const listFriend = createSlice({
       );
       console.log(friend);
       if (friend !== -1) {
-        console.log(action.payload.data);
         // TODO If friend exists we will added in the first of array and remove it from the old index
         state.data.unshift({
           message: action.payload.data,
@@ -29,13 +27,18 @@ export const listFriend = createSlice({
         });
         state.data.splice(friend + 1, 1);
       } else {
-        let data = action.payload.data;
-        if (action.payload.currentUser == action.payload.id) {
-          data["friend"] = action.payload.data["friendOne"];
-        } else {
-          data["friend"] = action.payload.data["friendTwo"];
+        console.log(action.payload.data);
+        // TODO Add a condition to check if we are add a message before the friend is exist
+        if (!action.payload.isMessage) {
+          console.log(action.payload.data);
+          state.data = [
+            {
+              message: action.payload.data.message,
+              friend: action.payload.data.friend,
+            },
+            ...state.data,
+          ];
         }
-        state.data.unshift(action.payload.data);
       }
     },
     changeStatus: (state, action) => {

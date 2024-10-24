@@ -11,8 +11,10 @@ import Message from "./message";
 import { axiosClient } from "../axios";
 import Pusher from "pusher-js";
 import { setIdFriend } from "../feautures/message/messageSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Main() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   let lists = [
     {
@@ -105,6 +107,12 @@ export default function Main() {
   const displayMessageFN = (id) => {
     dispatch(setIdFriend(id));
     setSearch([]);
+  };
+  // ? Handle logout
+  const handleLogout = () => {
+    axiosClient.get("/logout").then((res) => {
+      navigate("/");
+    });
   };
   return (
     <div className="w-[95%]">
@@ -210,7 +218,10 @@ export default function Main() {
                   );
                 })}
                 <hr />
-                <li className="flex items-center space-x-2 px-4 py-2 my-2 cursor-pointer hover:bg-slate-200">
+                <li
+                  className="flex items-center space-x-2 px-4 py-2 my-2 cursor-pointer hover:bg-slate-200"
+                  onClick={handleLogout}
+                >
                   <LogoutIcon />
                   <p>Log out</p>
                 </li>

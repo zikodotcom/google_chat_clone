@@ -22,10 +22,14 @@ export default function Chat() {
   // TODO: Check if user login or not and get his data if login
   useEffect(() => {
     // ? Get list friends
-    axiosClient.get("/getFriends").then((res) => {
-      console.log(res.data);
-      dispatch(setListFriend(res.data));
-    });
+    axiosClient
+      .get("/getFriends")
+      .then((res) => {
+        dispatch(setListFriend(res.data));
+      })
+      .catch((err) => {
+        navigate("/");
+      });
     io.emit("join-room", id);
     io.on("SendMessage", (message) => {
       dispatch(
@@ -39,7 +43,7 @@ export default function Chat() {
     io.on("addNewFriend", (data) => {
       dispatch(
         changeLastMessage({
-          id: data.friendTwo,
+          id: data.friend["_id"],
           currentUser: id,
           data,
         })
@@ -50,6 +54,10 @@ export default function Chat() {
       console.log("change status", data);
       dispatch(changeStatus(data));
     });
+    // Clean up the event listener when the component unmounts
+    return () => {
+      io.off();
+    };
   }, []);
   return (
     <div className="flex bg-slate-100 h-[100vh] p-4">

@@ -10,9 +10,14 @@ import {
 import { axiosClient } from "../axios";
 import { useForm } from "react-hook-form";
 
-import { changeLastMessage, changeStatus } from "../feautures/listFriend/listFriendSlice";
+import {
+  changeLastMessage,
+  changeStatus,
+} from "../feautures/listFriend/listFriendSlice";
 import socket from "../service/socket";
+import { useNavigate } from "react-router-dom";
 export default function Message() {
+  const navigate = useNavigate();
   const io = socket;
   const dispatch = useDispatch();
   const ref = useRef(null);
@@ -27,15 +32,20 @@ export default function Message() {
   const { value } = useSelector((state) => state.user);
   useEffect(() => {
     io.emit("join-room", value.id);
-    axiosClient.get(`/getMessages/${id}`).then((res) => {
-      dispatch(setMessageData(res.data));
-      setStatus(res.data.friend.status);
-      setLoading(false);
-      setTimeout(() => scrollDown(), 1000);
-    });
+    axiosClient
+      .get(`/getMessages/${id}`)
+      .then((res) => {
+        dispatch(setMessageData(res.data));
+        setStatus(res.data.friend.status);
+        setLoading(false);
+        setTimeout(() => scrollDown(), 1000);
+      })
+      .catch((err) => {
+        navigate("/");
+      });
     io.on("SendMessage", (message) => {
+      console.log("change last message");
       if (message.sender == id) {
-        // TODO Know why the message go to sender part and why is repeated couple of times
         dispatch(
           addMessage({
             data: message,
@@ -52,6 +62,7 @@ export default function Message() {
     });
     // TODO ON added new friend
     io.on("addNewFriend", (data) => {
+      console.log("add new friend ", data);
       dispatch(
         changeLastMessage({
           id: data.friendTwo,
@@ -96,6 +107,7 @@ export default function Message() {
           changeLastMessage({
             id: res.data.receiver,
             data: res.data,
+            isMessage: true,
           })
         );
       });

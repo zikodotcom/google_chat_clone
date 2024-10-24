@@ -36,7 +36,7 @@ function Login() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        setLoading(false);
         setError("email", {
           type: "400",
           message: err.response.data.message,
@@ -49,10 +49,9 @@ function Login() {
   };
   // TODO: IF the user logged transfer it to chat route
   useEffect(() => {
-    // axiosClient.get("/v1/users").then((res) => {
-    //   console.log("object");
-    //   navigate("/chat");
-    // });
+    axiosClient.get("/isLogged").then((res) => {
+      navigate("/chat");
+    });
   }, []);
   return (
     <div className="flex flex-col justify-center items-center h-[100vh] lg:flex-row ">

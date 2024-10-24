@@ -46,28 +46,6 @@ export default function LeftAside() {
     });
   };
   const { data } = useSelector((state) => state.listFriend);
-  // TODO: Get list friends with the last message
-  useEffect(() => {
-    console.log(data);
-    //     Pusher.logToConsole = true;
-    //     const pusher = new Pusher('0f5d31c83f7740a9a3fa', {
-    //         cluster: 'eu'
-    //     });
-    //     const channel = pusher.subscribe('my-channel');
-    //     const changeStatusEvent = ({statusUsr}) => {
-    //         dispatch(changeLastMessage({
-    //           name: statusUsr.name,
-    //           message : statusUsr,
-    //           keys: 'friend'
-    //       }))
-    //   }
-    //   channel.bind('changeStatus', changeStatusEvent);
-    //   return () => {
-    //     // Clean up: unsubscribe from Pusher channel
-    //     channel.unbind('changeStatus', changeStatusEvent);
-    //     pusher.disconnect();
-    // };
-  }, []);
   const displayMessage = (id) => {
     dispatch(setIdFriend(id));
   };
