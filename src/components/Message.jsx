@@ -75,6 +75,7 @@ export default function Message() {
     io.on("changeStatus", (data) => {
       console.log("change status", data);
       dispatch(changeStatus(data));
+      setStatus(data.status);
     });
     // Clean up the event listener when the component unmounts
     return () => {

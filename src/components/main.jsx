@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "./message";
 import { axiosClient } from "../axios";
 import Pusher from "pusher-js";
-import { setIdFriend } from "../feautures/message/messageSlice";
+import { setBackHome, setIdFriend } from "../feautures/message/messageSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function Main() {
@@ -111,6 +111,9 @@ export default function Main() {
   // ? Handle logout
   const handleLogout = () => {
     axiosClient.get("/logout").then((res) => {
+      // TODO Empty the current friend
+      dispatch(setBackHome());
+      // TODO Back to login page
       navigate("/");
     });
   };
